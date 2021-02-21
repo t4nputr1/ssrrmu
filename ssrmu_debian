@@ -52,7 +52,7 @@ do_stop(){
 		if [[ $RETVAL -eq 0 ]]; then
 			echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Berhasil berhenti !"
 		else
-			echo -e "${Error_font_prefix}[informasi]${Font_suffix}$NAME Berhasil berhenti !"
+			echo -e "${Error_font_prefix}[kesalahan]${Font_suffix}$NAME Berhasil berhenti !"
 		fi
 	else
 		echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Tidak berjalan !"
