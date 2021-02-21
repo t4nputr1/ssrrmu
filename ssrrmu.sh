@@ -358,8 +358,8 @@ View_User_info(){
 # 设置 配置信息
 Set_config_user(){
 	echo "Please enter the username you want to set (do not repeat, does not support Chinese, will be reported incorrect!)"
-	read -e -p "(Default: doubi):" ssr_user
-	[[ -z "${ssr_user}" ]] && ssr_user="doubi"
+	read -e -p "(Default: adminssh):" ssr_user
+	[[ -z "${ssr_user}" ]] && ssr_user="adminssh"
 	echo && echo ${Separator_1} && echo -e "	username : ${Green_font_prefix}${ssr_user}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
 Set_config_port(){
@@ -383,8 +383,8 @@ Set_config_port(){
 }
 Set_config_password(){
 	echo "Please enter the user password you want to set"
-	read -e -p "(Default: doub.io):" ssr_password
-	[[ -z "${ssr_password}" ]] && ssr_password="doub.io"
+	read -e -p "(Default: mfauzan58):" ssr_password
+	[[ -z "${ssr_password}" ]] && ssr_password="mfauzan58"
 	echo && echo ${Separator_1} && echo -e "	Password : ${Green_font_prefix}${ssr_password}${Font_color_suffix}" && echo ${Separator_1} && echo
 }
 Set_config_method(){
