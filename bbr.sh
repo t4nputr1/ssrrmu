@@ -11,16 +11,16 @@ export PATH
 #=================================================
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
-Info="${Green_font_prefix}[信息]${Font_color_suffix}"
-Error="${Red_font_prefix}[错误]${Font_color_suffix}"
-Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
+Info="${Green_font_prefix}[informasi]${Font_color_suffix}"
+Error="${Red_font_prefix}[kesalahan]${Font_color_suffix}"
+Tip="${Green_font_prefix}[catatan]${Font_color_suffix}"
 filepath=$(cd "$(dirname "$0")"; pwd)
 file=$(echo -e "${filepath}"|awk -F "$0" '{print $1}')
 
 check_root(){
-	[[ $EUID != 0 ]] && echo -e "${Error} 当前非ROOT账号(或没有ROOT权限)，无法继续操作，请更换ROOT账号或使用 ${Green_background_prefix}sudo su${Font_color_suffix} 命令获取临时ROOT权限（执行后可能会提示输入当前账号的密码）。" && exit 1
+	[[ $EUID != 0 ]] && echo -e "${Error} Akun non-ROOT saat ini (atau tanpa izin ROOT), tidak dapat terus beroperasi, harap ubah akun ROOT atau gunakan ${Green_background_prefix}sudo su${Font_color_suffix} Perintah untuk mendapatkan izin ROOT sementara (Anda mungkin diminta memasukkan kata sandi akun saat ini setelah eksekusi)。" && exit 1
 }
-#检查系统
+#Periksa sistemnya
 check_sys(){
 	if [[ -f /etc/redhat-release ]]; then
 		release="centos"
@@ -39,19 +39,19 @@ check_sys(){
     fi
 }
 Set_latest_new_version(){
-	echo -e "请输入 要下载安装的Linux内核版本(BBR) ${Green_font_prefix}[ 格式: x.xx.xx ，例如: 4.9.96 ]${Font_color_suffix}
-${Tip} 内核版本列表请去这里获取：${Green_font_prefix}[ http://kernel.ubuntu.com/~kernel-ppa/mainline/ ]${Font_color_suffix}
-建议使用${Green_font_prefix}稳定版本：4.9.XX ${Font_color_suffix}，4.9 以上版本属于测试版，稳定版与测试版同步更新，BBR 加速效果无区别。"
-	read -e -p "(直接回车，自动获取最新稳定版本):" latest_version
+	echo -e "Silakan masukkan versi kernel Linux (BBR) untuk mengunduh dan menginstal ${Green_font_prefix}[ Format: x.xx.xx, misalnya: 4.9.96 ]${Font_color_suffix}
+${Tip} Silakan buka di sini untuk daftar versi kernel：${Green_font_prefix}[ http://kernel.ubuntu.com/~kernel-ppa/mainline/ ]${Font_color_suffix}
+Direkomendasikan untuk digunakan${Green_font_prefix}Versi stabil: 4.9.XX ${Font_color_suffix}，4.9 Versi di atas termasuk versi beta, versi stabil dan versi beta diperbarui secara bersamaan, tidak ada perbedaan dalam akselerasi BBR。"
+	read -e -p "(Masuk langsung untuk mendapatkan versi stabil terbaru secara otomatis):" latest_version
 	[[ -z "${latest_version}" ]] && get_latest_new_version
 	echo
 }
-# 本段获取最新版本的代码来源自: https://teddysun.com/489.html
+# Sumber kode versi terbaru paragraf ini adalah dari: https://teddysun.com/489.html
 get_latest_new_version(){
-	echo -e "${Info} 检测稳定版内核最新版本中..."
+	echo -e "${Info} Periksa versi terbaru dari kernel stabil..."
 	latest_version=$(wget -qO- -t1 -T2 "http://kernel.ubuntu.com/~kernel-ppa/mainline/" | awk -F'\"v' '/v4.9.*/{print $2}' |grep -v '\-rc'| cut -d/ -f1 | sort -V | tail -1)
-	[[ -z ${latest_version} ]] && echo -e "${Error} 检测内核最新版本失败 !" && exit 1
-	echo -e "${Info} 稳定版内核最新版本为 : ${latest_version}"
+	[[ -z ${latest_version} ]] && echo -e "${Error} Gagal mendeteksi versi terbaru dari kernel !" && exit 1
+	echo -e "${Info} Versi terbaru dari kernel stabil adalah : ${latest_version}"
 }
 get_latest_version(){
 	Set_latest_new_version
@@ -66,7 +66,7 @@ get_latest_version(){
 		deb_kernel_name="linux-image-${latest_version}-i386.deb"
 	fi
 }
-#检查内核是否满足
+#Periksa apakah kernel memenuhi
 check_deb_off(){
 	get_latest_new_version
 	deb_ver=`dpkg -l|grep linux-image | awk '{print $2}' | awk -F '-' '{print $3}' | grep '[4-9].[0-9]*.'`
@@ -76,45 +76,45 @@ check_deb_off(){
 	fi
 	if [[ "${deb_ver}" != "" ]]; then
 		if [[ "${deb_ver}" == "${latest_version}" ]]; then
-			echo -e "${Info} 检测到当前内核版本[${deb_ver}] 已满足要求，继续..."
+			echo -e "${Info} Versi kernel saat ini terdeteksi[${deb_ver}] Persyaratan sudah terpenuhi, lanjutkan..."
 		else
-			echo -e "${Tip} 检测到当前内核版本[${deb_ver}] 支持开启BBR 但不是最新内核版本，可以使用${Green_font_prefix} bash ${file}/bbr.sh ${Font_color_suffix}来升级内核 !(注意：并不是越新的内核越好，4.9 以上版本的内核 目前皆为测试版，不保证稳定性，旧版本如使用无问题 建议不要升级！)"
+			echo -e "${Tip} Versi kernel saat ini terdeteksi[${deb_ver}] Dukungan untuk membuka BBR tetapi bukan versi kernel terbaru, Anda dapat menggunakan${Green_font_prefix} bash ${file}/bbr.sh ${Font_color_suffix}Datang untuk mengupgrade kernel! (Catatan: kernel yang lebih baru tidak lebih baik. Kernel versi 4.9 ke atas saat ini dalam versi beta, dan stabilitas tidak dijamin. Jika versi lama digunakan tanpa masalah, disarankan untuk tidak mengupgrade！)"
 		fi
 	else
-		echo -e "${Error} 检测到当前内核版本[${deb_ver}] 不支持开启BBR，请使用${Green_font_prefix} bash ${file}/bbr.sh ${Font_color_suffix}来更换最新内核 !" && exit 1
+		echo -e "${Error} Versi kernel saat ini terdeteksi[${deb_ver}] BBR tidak didukung, harap gunakan${Green_font_prefix} bash ${file}/bbr.sh ${Font_color_suffix}Untuk mengganti kernel terbaru !" && exit 1
 	fi
 }
-# 删除其余内核
+# Hapus inti yang tersisa
 del_deb(){
 	deb_total=`dpkg -l | grep linux-image | awk '{print $2}' | grep -v "${latest_version}" | wc -l`
 	if [[ "${deb_total}" -ge "1" ]]; then
-		echo -e "${Info} 检测到 ${deb_total} 个其余内核，开始卸载..."
+		echo -e "${Info} terdeteksi ${deb_total} Inti yang tersisa, mulai hapus penginstalan..."
 		for((integer = 1; integer <= ${deb_total}; integer++))
 		do
 			deb_del=`dpkg -l|grep linux-image | awk '{print $2}' | grep -v "${latest_version}" | head -${integer}`
-			echo -e "${Info} 开始卸载 ${deb_del} 内核..."
+			echo -e "${Info} Mulai hapus instalan ${deb_del} Inti..."
 			apt-get purge -y ${deb_del}
-			echo -e "${Info} 卸载 ${deb_del} 内核卸载完成，继续..."
+			echo -e "${Info} Copot pemasangan ${deb_del} Penghapusan kernel selesai, lanjutkan..."
 		done
 		deb_total=`dpkg -l|grep linux-image | awk '{print $2}' | wc -l`
 		if [[ "${deb_total}" = "1" ]]; then
-			echo -e "${Info} 内核卸载完毕，继续..."
+			echo -e "${Info} Setelah kernel dibongkar, lanjutkan..."
 		else
-			echo -e "${Error} 内核卸载异常，请检查 !" && exit 1
+			echo -e "${Error} Pengecualian penghapusan kernel, harap periksa !" && exit 1
 		fi
 	else
-		echo -e "${Info} 检测到除刚安装的内核以外已无多余内核，跳过卸载多余内核步骤 !"
+		echo -e "${Info} Terdeteksi bahwa tidak ada kernel yang redundan kecuali kernel yang baru diinstal, lewati langkah menghapus instalan kernel yang berlebihan !"
 	fi
 }
 del_deb_over(){
 	del_deb
 	update-grub
 	addsysctl
-	echo -e "${Tip} 重启VPS后，请运行脚本查看 BBR 是否正常加载，运行命令： ${Green_background_prefix} bash ${file}/bbr.sh status ${Font_color_suffix}"
-	read -e -p "需要重启VPS后，才能开启BBR，是否现在重启 ? [Y/n] :" yn
+	echo -e "${Tip} Setelah VPS restart, silahkan jalankan script untuk mengecek apakah BBR sudah di-load secara normal, jalankan perintahnya： ${Green_background_prefix} bash ${file}/bbr.sh status ${Font_color_suffix}"
+	read -e -p "Anda perlu me-restart VPS sebelum BBR bisa dihidupkan, apakah akan restart sekarang ? [Y/n] :" yn
 	[[ -z "${yn}" ]] && yn="y"
 	if [[ $yn == [Yy] ]]; then
-		echo -e "${Info} VPS 重启中..."
+		echo -e "${Info} VPS dimulai ulang..."
 		reboot
 	fi
 }
@@ -129,26 +129,26 @@ installbbr(){
 	fi
 	if [[ "${deb_ver}" != "" ]]; then	
 		if [[ "${deb_ver}" == "${latest_version}" ]]; then
-			echo -e "${Info} 检测到当前内核版本[${deb_ver}] 已是最新版本，无需继续 !"
+			echo -e "${Info} Versi kernel saat ini terdeteksi[${deb_ver}] Ini adalah versi terbaru, tidak perlu melanjutkan !"
 			deb_total=`dpkg -l|grep linux-image | awk '{print $2}' | grep -v "${latest_version}" | wc -l`
 			if [[ "${deb_total}" != "0" ]]; then
-				echo -e "${Info} 检测到内核数量异常，存在多余内核，开始删除..."
+				echo -e "${Info} Jumlah inti yang tidak normal terdeteksi, ada inti yang berlebihan, dan penghapusan dimulai..."
 				del_deb_over
 			else
 				exit 1
 			fi
 		else
-			echo -e "${Info} 检测到当前内核版本支持开启BBR 但不是最新内核版本，开始升级(或降级)内核..."
+			echo -e "${Info} Terdeteksi bahwa versi kernel saat ini mendukung pengaktifan BBR tetapi bukan versi kernel terbaru, dan mulai memutakhirkan (atau menurunkan) kernel..."
 		fi
 	else
-		echo -e "${Info} 检测到当前内核版本不支持开启BBR，开始..."
+		echo -e "${Info} Terdeteksi bahwa versi kernel saat ini tidak mendukung pengaktifan BBR, start..."
 		virt=`virt-what`
 		if [[ -z ${virt} ]]; then
 			apt-get update && apt-get install virt-what -y
 			virt=`virt-what`
 		fi
 		if [[ ${virt} == "openvz" ]]; then
-			echo -e "${Error} BBR 不支持 OpenVZ 虚拟化(不支持更换内核) !" && exit 1
+			echo -e "${Error} BBR tidak mendukung virtualisasi OpenVZ (penggantian kernel tidak didukung) !" && exit 1
 		fi
 	fi
 	echo "nameserver 8.8.8.8" > /etc/resolv.conf
@@ -156,31 +156,31 @@ installbbr(){
 	
 	wget -O "${deb_kernel_name}" "${deb_kernel_url}"
 	if [[ -s ${deb_kernel_name} ]]; then
-		echo -e "${Info} 内核安装包下载成功，开始安装内核..."
+		echo -e "${Info} Paket penginstalan kernel berhasil diunduh, dan penginstalan kernel dimulai..."
 		dpkg -i ${deb_kernel_name}
 		rm -rf ${deb_kernel_name}
 	else
-		echo -e "${Error} 内核安装包下载失败，请检查 !" && exit 1
+		echo -e "${Error} Download paket instalasi kernel gagal, silakan periksa !" && exit 1
 	fi
-	#判断内核是否安装成功
+	#Tentukan apakah kernel berhasil diinstal
 	deb_ver=`dpkg -l | grep linux-image | awk '{print $2}' | awk -F '-' '{print $3}' | grep "${latest_version}"`
 	if [[ "${deb_ver}" != "" ]]; then
-		echo -e "${Info} 检测到内核安装成功，开始卸载其余内核..."
+		echo -e "${Info} Deteksi bahwa kernel telah berhasil diinstal, mulailah menghapus instalan kernel yang tersisa..."
 		del_deb_over
 	else
-		echo -e "${Error} 检测到内核安装失败，请检查 !" && exit 1
+		echo -e "${Error} Instalasi kernel gagal terdeteksi, silakan periksa !" && exit 1
 	fi
 }
 bbrstatus(){
 	check_bbr_status_on=`sysctl net.ipv4.tcp_congestion_control | awk '{print $3}'`
 	if [[ "${check_bbr_status_on}" = "bbr" ]]; then
-		echo -e "${Info} 检测到 BBR 已开启 !"
-		# 检查是否启动BBR
+		echo -e "${Info} BBR terdeteksi untuk dihidupkan !"
+		# Periksa apakah BBR dimulai
 		check_bbr_status_off=`lsmod | grep bbr`
 		if [[ "${check_bbr_status_off}" = "" ]]; then
-			echo -e "${Error} 检测到 BBR 已开启但未正常启动，请尝试使用低版本内核(可能是存着兼容性问题，虽然内核配置中打开了BBR，但是内核加载BBR模块失败) !"
+			echo -e "${Error} Terdeteksi bahwa BBR telah dihidupkan tetapi tidak dimulai secara normal, coba gunakan versi kernel yang lebih rendah (mungkin ada masalah kompatibilitas, meskipun BBR dihidupkan dalam konfigurasi kernel, kernel gagal memuat modul BBR ) !"
 		else
-			echo -e "${Info} 检测到 BBR 已开启并已正常启动 !"
+			echo -e "${Info} BBR telah terdeteksi dan dimulai secara normal !"
 		fi
 		exit 1
 	fi
@@ -200,7 +200,7 @@ startbbr(){
 	sleep 1s
 	bbrstatus
 }
-# 关闭BBR
+# Matikan BBR
 stopbbr(){
 	check_deb_off
 	sed -i '/net\.core\.default_qdisc=fq/d' /etc/sysctl.conf
@@ -208,21 +208,21 @@ stopbbr(){
 	sysctl -p
 	sleep 1s
 	
-	read -e -p "需要重启VPS后，才能彻底停止BBR，是否现在重启 ? [Y/n] :" yn
+	read -e -p "Anda perlu me-restart VPS untuk menghentikan BBR sepenuhnya, apakah akan merestartnya sekarang ? [Y/n] :" yn
 	[[ -z "${yn}" ]] && yn="y"
 	if [[ $yn == [Yy] ]]; then
-		echo -e "${Info} VPS 重启中..."
+		echo -e "${Info} VPS Memulai kembali..."
 		reboot
 	fi
 }
-# 查看BBR状态
+# Lihat status BBR
 statusbbr(){
 	check_deb_off
 	bbrstatus
-	echo -e "${Error} BBR 未开启 !"
+	echo -e "${Error} BBR tidak dinyalakan !"
 }
 check_sys
-[[ ${release} != "debian" ]] && [[ ${release} != "ubuntu" ]] && echo -e "${Error} 本脚本不支持当前系统 ${release} !" && exit 1
+[[ ${release} != "debian" ]] && [[ ${release} != "ubuntu" ]] && echo -e "${Error} Skrip ini tidak mendukung sistem saat ini ${release} !" && exit 1
 action=$1
 [[ -z $1 ]] && action=install
 case "$action" in
@@ -230,7 +230,7 @@ case "$action" in
 	${action}bbr
 	;;
 	*)
-	echo "输入错误 !"
-	echo "用法: { install | start | stop | status }"
+	echo "kesalahan masukan !"
+	echo "pemakaian: { install | start | stop | status }"
 	;;
 esac
