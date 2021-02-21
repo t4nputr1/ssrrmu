@@ -8,7 +8,7 @@ Original version - https://doub.io/ss-jc60/ (Chinese)
 PRs are welcome!
 
 ```bash
-sudo wget https://raw.githubusercontent.com/hybtoy/ssrrmu/master/ssrrmu.sh && chmod +x ssrrmu.sh && bash ssrrmu.sh
+wget https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrrmu.sh && chmod +x ssrrmu.sh && bash ssrrmu.sh
 ```
 Recommended config:
 
