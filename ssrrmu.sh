@@ -333,7 +333,7 @@ View_User_info(){
 	[[ -z "${ip}" ]] && Get_IP
 	ss_ssr_determine
 	clear && echo " Deatil Account ShadowsocksR"
-	echo =e "===================================================" && echo
+	echo -e "===================================================" && echo
 	echo -e " User [${user_name}] configuration info：" && echo
 	echo -e " IP : ${Green_font_prefix}${ip}${Font_color_suffix}"
 	echo -e " Port : ${Green_font_prefix}${port}${Font_color_suffix}"
