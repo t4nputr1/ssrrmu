@@ -267,7 +267,7 @@ ss_link_qr(){
 	SSbase64=$(urlsafe_base64 "${method}:${password}@${ip}:${port}")
 	SSurl="ss://${SSbase64}"
 	SSQRcode="https://www.codigos-qr.com/qr/php/qr_img.php?d=${SSurl}"
-	ss_link=" SS    Link : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n Kode QR SS : ${Green_font_prefix}${SSQRcode}${Font_color_suffix}"
+	ss_link=" SS    Link : ${Green_font_prefix}${SSurl}${Font_color_suffix} \n Code QR SS : ${Green_font_prefix}${SSQRcode}${Font_color_suffix}"
 }
 ssr_link_qr(){
 	SSRprotocol=$(echo ${protocol} | sed 's/_compatible//g')
@@ -276,7 +276,7 @@ ssr_link_qr(){
 	SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 	SSRurl="ssr://${SSRbase64}"
 	SSRQRcode="https://www.codigos-qr.com/qr/php/qr_img.php?d=?text=${SSRurl}"
-	ssr_link=" SSR   Link : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n Kode QR SSR : ${Red_font_prefix}${SSRQRcode}${Font_color_suffix} \n "
+	ssr_link=" SSR   Link : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n Code QR SSR : ${Red_font_prefix}${SSRQRcode}${Font_color_suffix} \n "
 }
 ss_ssr_determine(){
 	protocol_suffix=`echo ${protocol} | awk -F "_" '{print $NF}'`
@@ -864,14 +864,14 @@ Download_SSR(){
 }
 Service_SSR(){
 	if [[ ${release} = "centos" ]]; then
-		if ! wget --no-check-certificate https://raw.githubusercontent.com/hybtoy/ssrrmu/master/ssrmu_centos -O /etc/init.d/ssrmu; then
+		if ! wget --no-check-certificate https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrmu_centos -O /etc/init.d/ssrmu; then
 			echo -e "${Error} Download skrip manajemen layanan ShadowsocksR gagal !" && exit 1
 		fi
 		chmod +x /etc/init.d/ssrmu
 		chkconfig --add ssrmu
 		chkconfig ssrmu on
 	else
-		if ! wget --no-check-certificate https://raw.githubusercontent.com/hybtoy/ssrrmu/master/ssrmu_debian -O /etc/init.d/ssrmu; then
+		if ! wget --no-check-certificate https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrmu_debian -O /etc/init.d/ssrmu; then
 			echo -e "${Error} Download skrip manajemen layanan ShadowsocksR gagal !" && exit 1
 		fi
 		chmod +x /etc/init.d/ssrmu
@@ -1749,7 +1749,7 @@ crontab_monitor_ssr_cron_stop(){
 Update_Shell(){
 	echo -e "Versi saat ini adalah [ ${sh_ver} ]，Mulailah menguji versi terbaru..."
 	sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrrmu.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
-	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrrmu.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
+	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/t4nputr1/ssrrmu/master/ssrmu.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} Gagal mendeteksi versi terbaru !" && exit 0
 	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 		echo -e "Versi baru ditemukan[ ${sh_new_ver} ]，Memperbarui？[Y/n]"
