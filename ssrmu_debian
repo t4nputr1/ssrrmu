@@ -38,9 +38,9 @@ do_start(){
 		sleep 2s
 		check_running
 		if [[ $? -eq 0 ]]; then
-			echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Mulai dengan Sukses !"
+			echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Berhasil di Start !"
 		else
-			echo -e "${Error_font_prefix}[kesalahan]${Font_suffix} $NAME gagal untuk Mengaktifkan !"
+			echo -e "${Error_font_prefix}[kesalahan]${Font_suffix} $NAME Gagal di Start !"
 		fi
 	fi
 }
@@ -50,9 +50,9 @@ do_stop(){
 		kill -9 ${PID}
 		RETVAL=$?
 		if [[ $RETVAL -eq 0 ]]; then
-			echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Berhasil Berhenti !"
+			echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Berhasil di Stop !"
 		else
-			echo -e "${Error_font_prefix}[kesalahan]${Font_suffix}$NAME Berhenti Gagal !"
+			echo -e "${Error_font_prefix}[kesalahan]${Font_suffix}$NAME Gagal di Stop !"
 		fi
 	else
 		echo -e "${Info_font_prefix}[informasi]${Font_suffix} $NAME Tidak Berjalan !"
