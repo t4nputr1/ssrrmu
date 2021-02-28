@@ -1,0 +1,9 @@
+echo "Please enter the username you want to set (do not repeat, does not support Chinese, will be reported incorrect!)"
+read -e -p "(Default: adminssh):" ssr_user
+echo -e "Please enter the user port to be set"
+read -e -p "(Default: 2333):" ssr_port
+[[ -z "$ssr_port" ]] && ssr_port="2333"
+expr ${ssr_port} + 1 &>/dev/null
+echo "Please enter the user password you want to set"
+read -e -p "(Default: mfauzan58):" ssr_password
+[[ -z "${ssr_password}" ]] && ssr_password="mfauzan58"
