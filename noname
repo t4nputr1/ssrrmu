@@ -1,71 +1,33 @@
-View_User_info(){
-	ip=$(cat ${config_user_api_file}|grep "SERVER_PUB_ADDR = "|awk -F "[']" '{print $2}')
-	[[ -z "${ip}" ]] && Get_IP
-	ss_ssr_determine
-	clear && echo " Deatil Account ShadowsocksR"
-	echo -e "===================================================" && echo
-	echo -e " User [${user_name}] configuration info：" && echo
-	echo -e " IP : ${Green_font_prefix}${ip}${Font_color_suffix}"
-	echo -e " Port : ${Green_font_prefix}${port}${Font_color_suffix}"
-	echo -e " Password : ${Green_font_prefix}${password}${Font_color_suffix}"
-	echo -e " Encryption : ${Green_font_prefix}${method}${Font_color_suffix}"
-	echo -e " Protocol : ${Red_font_prefix}${protocol}${Font_color_suffix}"
-	echo -e " obfs : ${Red_font_prefix}${obfs}${Font_color_suffix}"
-    echo -e " Masa Aktif : ${Red_font_prefix}${exp}${Font_color_suffix}"
-	echo -e " Device limit : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
-	echo -e " Single thread speed limit : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
-	echo -e " Total user speed limit : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
-	echo -e " Forbidden port : ${Green_font_prefix}${forbidden_port} ${Font_color_suffix}"
-	echo
-	echo -e " Used traffic : Upload: ${Green_font_prefix}${u}${Font_color_suffix} + Download: ${Green_font_prefix}${d}${Font_color_suffix} = ${Green_font_prefix}${transfer_enable_Used_2}${Font_color_suffix}"
-	echo -e " Remaining traffic : ${Green_font_prefix}${transfer_enable_Used} ${Font_color_suffix}"
-	echo -e " Total user traffic : ${Green_font_prefix}${transfer_enable} ${Font_color_suffix}"
-	echo -e "${ssr_link}"
- 	echo "==================================================="
-}
-
 # 设置 配置信息
 
-Set_config_user(){
 clear
 echo "Please enter the username you want to set (do not repeat, does not support Chinese, will be reported incorrect!)"
 read -e -p "(Default: ):" ssr_user
 echo && echo ${Separator_1} && echo -e "	username : ${Green_font_prefix}${ssr_user}${Font_color_suffix}" && echo ${Separator_1} && echo
 read -p "Expired (hari): " masaaktif
 exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-}
-Set_config_port(){
+
 lastport=$(cat /usr/local/shadowsocksr/mudb.json | grep '"port": ' | tail -n1 | awk '{print $2}' | cut -d "," -f 1 | cut -d ":" -f 1 )
 ssr_port=$((lastport+1))
-}
-Set_config_password(){
+
 ssr_password="$ssr_user"
-}
-Set_config_method(){
+
 ssr_method="aes-256-cfb"
-}
-Set_config_protocol(){
+
 ssr_protocol="origin"
-}
-Set_config_obfs(){
+
 ssr_obfs="tls1.2_ticket_auth_compatible"
-}
-Set_config_protocol_param(){
+
 ssr_protocol_param="2"
-}
-Set_config_speed_limit_per_con(){
+
 ssr_speed_limit_per_con=0
-}
-Set_config_speed_limit_per_user(){
+
 ssr_speed_limit_per_user=0
-}
-Set_config_transfer(){
+
 ssr_transfer="838868"
-}
-Set_config_forbid(){
+
 ssr_forbid=""
-}
-Set_config_enable(){
+
 	user_total=$(expr ${user_total} - 1)
 	for((integer = 0; integer <= ${user_total}; integer++))
 	do
@@ -105,9 +67,9 @@ Set_config_enable(){
 	else
 		echo -e "${Error} 当前Port的禁用状态异常[${enable}] !" && exit 1
 	fi
-}
 
-View_User_info(){
+
+
 	ip=$(cat ${config_user_api_file}|grep "SERVER_PUB_ADDR = "|awk -F "[']" '{print $2}')
 	[[ -z "${ip}" ]] && Get_IP
 	ss_ssr_determine
@@ -120,15 +82,13 @@ View_User_info(){
 	echo -e " Encryption : ${Green_font_prefix}${method}${Font_color_suffix}"
 	echo -e " Protocol : ${Red_font_prefix}${protocol}${Font_color_suffix}"
 	echo -e " obfs : ${Red_font_prefix}${obfs}${Font_color_suffix}"
-  echo -e " Masa Aktif : ${Red_font_prefix}${exp}${Font_color_suffix}"
+	echo -e " Masa Aktif : ${Red_font_prefix}${exp}${Font_color_suffix}"
 	echo -e " Device limit : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
 	echo -e " Single thread speed limit : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
 	echo -e " Total user speed limit : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
 	echo -e " Forbidden port : ${Green_font_prefix}${forbidden_port} ${Font_color_suffix}"
-	echo
 	echo -e " Used traffic : Upload: ${Green_font_prefix}${u}${Font_color_suffix} + Download: ${Green_font_prefix}${d}${Font_color_suffix} = ${Green_font_prefix}${transfer_enable_Used_2}${Font_color_suffix}"
 	echo -e " Remaining traffic : ${Green_font_prefix}${transfer_enable_Used} ${Font_color_suffix}"
 	echo -e " Total user traffic : ${Green_font_prefix}${transfer_enable} ${Font_color_suffix}"
 	echo -e "${ssr_link}"
  	echo "==================================================="
-}
