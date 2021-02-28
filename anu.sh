@@ -45,27 +45,27 @@ ssr_forbid=""
 
 ssr_enable_yn ="y"
 
-SSRprotocol=$(echo ${protocol} | sed 's/_compatible//g')
-SSRobfs=$(echo ${obfs} | sed 's/_compatible//g')
-SSRPWDbase64=$(urlsafe_base64 "${password}")
-SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
-SSRurl="ssr://${SSRbase64}"
-ssr_link=" SSR Link : ${SSRurl} \n"
+SSRprotocol=$(echo $ssr_protocol | sed 's/_compatible//g')
+SSRobfs=$(echo $ssr_obfs | sed 's/_compatible//g')
+SSRPWDbase64=$(urlsafe_base64 "$ssr_user")
+SSRbase64=$(urlsafe_base64 "$ip:$port:$SSRprotocol:$method:$SSRobfs:$SSRPWDbase64")
+SSRurl="ssr://$SSRbase64"
+ssr_link=" SSR Link : $SSRurl "
 
 clear 
 echo " Deatil Account ShadowsocksR"
 echo -e "==================================================="
-echo -e " User [${user_name}] configuration info：" && echo
-echo -e " IP : ${ip}"
-echo -e " Port : ${port}$"
-echo -e " Password : ${password}"
-echo -e " Encryption : ${method}"
-echo -e " Protocol : ${protocol}"
-echo -e " obfs : ${obfs}"
+echo -e " User [$ssr_user] configuration info："
+echo -e " IP : $ip"
+echo -e " Port : $port"
+echo -e " Password : $ssr_user"
+echo -e " Encryption : $method"
+echo -e " Protocol : $protocol"
+echo -e " obfs : $ssr_obfs"
 echo -e " Masa Aktif : $(date -d "$AKTIF days" +"%d-%m-%Y")"
-echo -e " Device limit : ${protocol_param}"
-echo -e " Single thread speed limit : ${speed_limit_per_con} KB/S"
-echo -e " Total user speed limit : ${speed_limit_per_user} KB/S$"
-echo -e " Forbidden port : ${forbidden_port}"
+echo -e " Device limit : $protocol_param"
+echo -e " Single thread speed limit : $speed_limit_per_con KB/S"
+echo -e " Total user speed limit : $speed_limit_per_user KB/S$"
+echo -e " Forbidden port : Allow all"
 echo -e "${ssr_link}"
 echo "==================================================="
