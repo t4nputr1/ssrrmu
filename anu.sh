@@ -1,18 +1,23 @@
 #!/bin/bash
 
-ip=$(cat ${config_user_api_file}|grep "SERVER_PUB_ADDR = "|awk -F "[']" '{print $2}')
-	[[ -z "${ip}" ]] && Get_IP
+MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | head -n1`;
+#MYIP=$(wget -qO- ipv4.icanhazip.com)
+clear
+# go to root
+cd
+
+# get the VPS IP
+#ip=`ifconfig venet0:0 | grep 'inet addr' | awk {'print $2'} | sed s/.*://`
+ip=$(ifconfig | grep 'inet addr:' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | cut -d: -f2 | awk '{ print $1}' | head -1)
+if [ "$ip" = "" ]; then
+	ip=$(wget -qO- ipv4.icanhazip.com)
+fi
 	
-Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
-Info="${Green_font_prefix}[information]${Font_color_suffix}"
-Error="${Red_font_prefix}[error]${Font_color_suffix}"
-Tip="${Green_font_prefix}[note]${Font_color_suffix}"
-Separator_1="——————————————————————————————"
 
 clear
 echo "Please enter the username you want to set (do not repeat, does not support Chinese, will be reported incorrect!)"
 read -e -p "(Default: ):" ssr_user
-echo && echo ${Separator_1} && echo -e "	username : ${Green_font_prefix}${ssr_user}${Font_color_suffix}" && echo ${Separator_1} && echo
+echo && echo ${Separator_1} && echo -e "	username : ${ssr_user}
 read -p "Masa Aktif (hari): " masaaktif
 exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
 
@@ -44,22 +49,22 @@ SSRobfs=$(echo ${obfs} | sed 's/_compatible//g')
 SSRPWDbase64=$(urlsafe_base64 "${password}")
 SSRbase64=$(urlsafe_base64 "${ip}:${port}:${SSRprotocol}:${method}:${SSRobfs}:${SSRPWDbase64}")
 SSRurl="ssr://${SSRbase64}"
-ssr_link=" SSR Link : ${Red_font_prefix}${SSRurl}${Font_color_suffix} \n"
+ssr_link=" SSR Link : ${SSRurl} \n"
 
 clear 
 echo " Deatil Account ShadowsocksR"
-echo -e "===================================================" && echo
+echo -e "==================================================="
 echo -e " User [${user_name}] configuration info：" && echo
-echo -e " IP : ${Green_font_prefix}${ip}${Font_color_suffix}"
-echo -e " Port : ${Green_font_prefix}${port}${Font_color_suffix}"
-echo -e " Password : ${Green_font_prefix}${password}${Font_color_suffix}"
-echo -e " Encryption : ${Green_font_prefix}${method}${Font_color_suffix}"
-echo -e " Protocol : ${Red_font_prefix}${protocol}${Font_color_suffix}"
-echo -e " obfs : ${Red_font_prefix}${obfs}${Font_color_suffix}"
-echo -e " Masa Aktif : ${Red_font_prefix}${exp}${Font_color_suffix}"
-echo -e " Device limit : ${Green_font_prefix}${protocol_param}${Font_color_suffix}"
-echo -e " Single thread speed limit : ${Green_font_prefix}${speed_limit_per_con} KB/S${Font_color_suffix}"
-echo -e " Total user speed limit : ${Green_font_prefix}${speed_limit_per_user} KB/S${Font_color_suffix}"
-echo -e " Forbidden port : ${Green_font_prefix}${forbidden_port} ${Font_color_suffix}"
+echo -e " IP : ${ip}"
+echo -e " Port : ${port}$"
+echo -e " Password : ${password}"
+echo -e " Encryption : ${method}"
+echo -e " Protocol : ${protocol}"
+echo -e " obfs : ${obfs}"
+echo -e " Masa Aktif : ${exp}"
+echo -e " Device limit : ${protocol_param}"
+echo -e " Single thread speed limit : ${speed_limit_per_con} KB/S"
+echo -e " Total user speed limit : ${speed_limit_per_user} KB/S$"
+echo -e " Forbidden port : ${forbidden_port}"
 echo -e "${ssr_link}"
 echo "==================================================="
