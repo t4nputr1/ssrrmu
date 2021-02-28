@@ -19,7 +19,7 @@ echo "Please enter the username you want to set (do not repeat, does not support
 read -e -p "(Default: ):" ssr_user
 echo && echo ${Separator_1} && echo -e "	username : ${ssr_user}
 read -p "Masa Aktif (hari): " masaaktif
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
+exp= "date -d "$masaaktif days" +"%Y-%m-%d" "
 
 lastport=$(cat /usr/local/shadowsocksr/mudb.json | grep '"port": ' | tail -n1 | awk '{print $2}' | cut -d "," -f 1 | cut -d ":" -f 1 )
 ssr_port=$((lastport+1))
