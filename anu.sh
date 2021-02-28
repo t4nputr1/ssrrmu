@@ -17,9 +17,10 @@ fi
 clear
 echo "Please enter the username you want to set (do not repeat, does not support Chinese, will be reported incorrect!)"
 read -e -p "(Default: ):" ssr_user
-echo && echo ${Separator_1} && echo -e "	username : ${ssr_user}
-read -p "Expired (hari): " masaaktif
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
+read -p "Berapa hari account [$ssr_user] aktif: " AKTIF
+
+today="$(date +"%Y-%m-%d")"
+expire=$(date -d "$AKTIF days" +"%Y-%m-%d")
 
 lastport=$(cat /usr/local/shadowsocksr/mudb.json | grep '"port": ' | tail -n1 | awk '{print $2}' | cut -d "," -f 1 | cut -d ":" -f 1 )
 ssr_port=$((lastport+1))
@@ -61,7 +62,7 @@ echo -e " Password : ${password}"
 echo -e " Encryption : ${method}"
 echo -e " Protocol : ${protocol}"
 echo -e " obfs : ${obfs}"
-echo -e " Masa Aktif : ${exp}"
+echo -e " Masa Aktif : $(date -d "$AKTIF days" +"%d-%m-%Y")"
 echo -e " Device limit : ${protocol_param}"
 echo -e " Single thread speed limit : ${speed_limit_per_con} KB/S"
 echo -e " Total user speed limit : ${speed_limit_per_user} KB/S$"
